@@ -21,6 +21,10 @@ repositories {
 	mavenCentral()
 }
 
+ext{
+	set('testcontainers.version', "1.19.8")
+}
+
 dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter'
@@ -28,7 +32,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-	implementation 'org.postgresql:postgresql'
 	implementation 'org.springframework.data:spring-data-envers'
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation 'org.liquibase:liquibase-core'
@@ -38,7 +41,16 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation "org.testcontainers:postgresql:1.19.8"
+	testImplementation 'org.testcontainers:postgresql'
+	testImplementation 'org.testcontainers:junit-jupiter'
+
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	runtimeOnly 'org.postgresql:postgresql'
+
+
+
 
 }
 

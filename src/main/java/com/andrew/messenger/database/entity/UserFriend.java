@@ -8,29 +8,30 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "users_friend")
-public class UserFriend {
+@Table(name = "users_friends")
+public class UserFriend implements BaseEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "user_id_1")
+    private User user_1;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "friend_id")
-    private  Friend friend;
+    @JoinColumn(name = "user_id_2")
+    private User user_2;
 
-    public void setUser(User user) {
-        this.user = user;
-        user.getUserFriends().add(this);
+    /*
+    public void setUser(User user_1) {
+        this.user_1 = user_1;
+        user_1.getUserFriends().add(this);
     }
 
-    public void setFriend(Friend friend) {
-        this.friend = friend;
-        friend.getUserFriends().add(this);
-    }
+    public void setFriend( User user_2) {
+        this.user_2 = user_2;
+        user_2.getUserFriends().add(this);
+    }*/
 }

@@ -13,13 +13,13 @@ import java.util.List;
 @EqualsAndHashCode(exclude = {"userChats"})
 @ToString(exclude = {"userChats"})
 @Builder
-public class Chat {
+public class Chat implements BaseEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(unique = true ,nullable = false)
+    @Column(nullable = false)
     private String name;
 
     private String messages;

@@ -12,14 +12,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"userChats", "userFriends"})
-@ToString(exclude = {"userChats", "userFriends"})
+@EqualsAndHashCode(exclude = {"userChats", "userFriends", "userFriendsTwo"})
+@ToString(exclude = {"userChats", "userFriends", "userFriendsTwo"})
 @Builder
-public class User {
+@Table(name = "users")
+public class User implements BaseEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -28,7 +29,8 @@ public class User {
 
     private String lastname;
 
-    private LocalDate birthdate;
+    @JoinColumn(name = "birth_date")
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -40,6 +42,10 @@ public class User {
     private List<UserChat> userChats = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user_1")
     private List<UserFriend> userFriends = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user_2")
+    private List<UserFriend> userFriendsTwo = new ArrayList<>();
 }

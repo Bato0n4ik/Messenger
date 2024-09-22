@@ -8,12 +8,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "users_chat")
-public class UserChat {
+@Table(name = "users_chats")
+public class UserChat implements BaseEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

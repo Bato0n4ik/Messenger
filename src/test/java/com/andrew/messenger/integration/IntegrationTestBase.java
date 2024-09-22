@@ -9,7 +9,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @IT
-@Sql("classpath:sql/insert.sql")
+@Sql({"classpath:sql/insert.sql"})
 public abstract class IntegrationTestBase {
 
     private static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>(DockerImageName.parse("postgres:16-alpine"));
@@ -23,6 +23,6 @@ public abstract class IntegrationTestBase {
 
     @DynamicPropertySource
     static void postgresProperties(DynamicPropertyRegistry registry) {
-        registry. add("spring.datasource.uri", container::getJdbcUrl);
+        registry. add("spring.datasource.url", container::getJdbcUrl);
     }
 }
