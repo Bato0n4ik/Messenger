@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+    <div>
+
+        <p th:text="${user.username}">Username</p>
+        <h2><p th:text="|${user.firstname} ${user.lastname}|">Full name</p></h2>
+        <p> Birthdate: <span th:text="${user.birthDate}">Birthdate</span></p>
+
+
+        <div th:if="${user.role.name == 'ADMIN'}">
+            <h4>You can't do anything iven if you have ADMIN status!</h4>
+        </div>
+
+    </div>
+
+</body>
+</html>

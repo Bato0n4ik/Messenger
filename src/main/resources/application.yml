@@ -1,5 +1,8 @@
 
 spring:
+  mvc:
+    format:
+      date: iso
   application:
     name: messenger
   datasource:
