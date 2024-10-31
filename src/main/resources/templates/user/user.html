@@ -6,15 +6,24 @@
 </head>
 <body>
     <div>
+        <div th:name="header">
+            <form id="update" th:action="@{'/user/' + ${user.getId()} + '/update'}"  method="get">
+                <button form="update" name="user" th:value="${user}" type="submit" >update</button>
+            </form>
+        </div>
 
-        <p th:text="${user.username}">Username</p>
-        <h2><p th:text="|${user.firstname} ${user.lastname}|">Full name</p></h2>
-        <p> Birthdate: <span th:text="${user.birthDate}">Birthdate</span></p>
+        <div>
+            <p th:text="${user.username}">Username</p>
+            <h2><p th:text="|${user.firstname} ${user.lastname}|">Full name</p></h2>
+            <p> Birthdate: <span th:text="${user.birthDate}">Birthdate</span></p>
+        </div>
+
 
 
         <div th:if="${user.role.name == 'ADMIN'}">
             <h4>You can't do anything iven if you have ADMIN status!</h4>
         </div>
+
 
     </div>
 

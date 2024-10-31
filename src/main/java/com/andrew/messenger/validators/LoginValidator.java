@@ -2,22 +2,22 @@ package com.andrew.messenger.validators;
 
 import com.andrew.messenger.dto.LoginDto;
 import com.andrew.messenger.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class LoginValidator {
 
-    private final UserService userService;
+    private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
     public boolean validate(LoginDto loginDto) {
         return userService.findByUsername(loginDto.getUsername())
-                .map(u -> {
-                    return u.getPassword().equals(loginDto.getPassword());
-                })
+                .map(u -> u.getPassword().equals(passwordEncoder.encode(loginDto.getPassword())))
                 .orElse(false);
     }
 }

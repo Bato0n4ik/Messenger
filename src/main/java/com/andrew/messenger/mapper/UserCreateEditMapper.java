@@ -2,12 +2,20 @@ package com.andrew.messenger.mapper;
 
 import com.andrew.messenger.database.entity.User;
 import com.andrew.messenger.dto.UserCreateEditDto;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User>{
+
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -23,6 +31,11 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User>{
         user.setLastname(fromObject.getLastname());
         user.setBirthDate(fromObject.getBirthDate());
         user.setRole(fromObject.getRole());
+
+        Optional.of(fromObject.getRawPassword())
+                .filter(StringUtils::hasText)
+                .map(passwordEncoder::encode)
+                .ifPresent(user::setPassword);
     }
 
     @Override

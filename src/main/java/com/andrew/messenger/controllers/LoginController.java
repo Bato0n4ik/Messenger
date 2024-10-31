@@ -5,6 +5,7 @@ import com.andrew.messenger.dto.LoginDto;
 import com.andrew.messenger.service.UserService;
 import com.andrew.messenger.validators.LoginValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +25,8 @@ public class LoginController {
     public final LoginValidator loginValidator;
 
     @GetMapping
-    public String login(){
+    public String login(LoginDto loginDto, Model model){
+        model.addAttribute("loginDto", loginDto);
         return "user/login";
     }
 
@@ -42,7 +44,9 @@ public class LoginController {
             return "redirect:/login";
         }
 
-        return "redirect:/users/"
-                + userService.findByUsername(loginDto.getUsername()).map(User::getId).orElse(null);
+        return userService.findByUsername(loginDto.getUsername())
+                .map(User::getId)
+                .map(id -> "redirect:/users/"+ id)
+                .orElseThrow(() -> new UsernameNotFoundException(loginDto.getUsername()));
     }
 }

@@ -2,6 +2,7 @@ package com.andrew.messenger.controllers;
 
 import com.andrew.messenger.database.entity.Role;
 import com.andrew.messenger.dto.UserCreateEditDto;
+import com.andrew.messenger.dto.UserReadDto;
 import com.andrew.messenger.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,7 @@ public class UserController {
     @GetMapping("/registration")
     public String registration(@ModelAttribute  UserCreateEditDto user , Model model) {
         model.addAttribute("user", user);
+        model.addAttribute("roles", Role.values());
         return "user/registration";
     }
 
@@ -51,6 +53,12 @@ public class UserController {
 
         userService.create(user);
         return "redirect:/login";
+    }
+
+    @GetMapping("/{id}/update")
+    public String redirectToUpdate(@PathVariable Long id, UserReadDto user , Model model) {
+        model.addAttribute("user", user);
+        return "user/update";
     }
 
     @PostMapping("/{id}/update")
