@@ -6,6 +6,8 @@
 </head>
 <body>
     <div>
+
+
         <div th:name="header">
             <form id="update" th:action="@{'/user/' + ${user.getId()} + '/update'}"  method="get">
                 <button form="update" name="user" th:value="${user}" type="submit" >update</button>

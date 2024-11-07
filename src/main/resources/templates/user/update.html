@@ -5,7 +5,19 @@
     <title>Update</title>
 </head>
 <body>
-        <form th:action="@{'/users/' + ${user.getId()} +'/update'}" method="post">
+        <form th:action="@{'/users/' + ${user.getId()} +'/update'}" enctype="multipart/form-data" method="post">
+
+            <div th:if="${user.image}">
+                <img th:src="@{/api/v1/users/{userId}/avatar(userId=${user.id})}" alt="avatar">
+            </div>
+
+            <label for="image">Chose image:
+                <input id="image" name="image" type="file">
+            </label><br>
+
+            <label for="birthDate">Avatar:
+                <input id="birthDate" name="birthDate" type="text" th:value="${user.birthDate}">
+            </label><br>
 
             <label for="firstname">Firstname:
                 <input id="firstname" name="firstname" type="text" th:value="${user.firstname}">
@@ -13,10 +25,6 @@
 
             <label for="lastname">Lastname:
                 <input id="lastname" name="lastname" type="text" th:value="${user.lastname}">
-            </label><br>
-
-            <label for="birthDate">Birthdate:
-                <input id="birthDate" name="birthDate" type="text" th:value="${user.birthDate}">
             </label><br>
 
             <input type="submit" value="update">

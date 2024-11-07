@@ -5,16 +5,21 @@
     <title>Login</title>
 </head>
 <body>
-    <form action="/login" method="post" th:object="${loginDto}">
-        <label for="username">Username:
-            <input id="username" type="email" name="username" th:value="*{username}">
-        </label><br>
+    <div>
+        <form action="/login" method="post" th:object="${loginDto}">
+            <label for="username">Username:
+                <input id="username" type="email" name="username" th:value="*{username}">
+            </label><br>
 
-        <label for="password">Password:
-            <input id="password" type="password" name="password" th:value="*{password}">
-        </label><br>
+            <label for="password">Password:
+                <input id="password" type="password" name="password" th:value="*{password}">
+            </label><br>
 
-        <input type="submit" value="register">
-    </form>
+            <input type="submit" value="register">
+        </form>
+    </div>
+    <div>
+        <a href="users/registration">Registration</a>
+    </div>
 </body>
 </html>

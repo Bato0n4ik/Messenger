@@ -1,4 +1,4 @@
-package com.andrew.messenger.controllers;
+package com.andrew.messenger.http.controllers;
 
 import com.andrew.messenger.database.entity.Role;
 import com.andrew.messenger.dto.UserCreateEditDto;
