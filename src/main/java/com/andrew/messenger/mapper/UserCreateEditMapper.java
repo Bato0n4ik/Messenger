@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
+import org.springframework.web.multipart.MultipartFile;
+;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Component
 @RequiredArgsConstructor
@@ -31,6 +33,11 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User>{
         user.setLastname(fromObject.getLastname());
         user.setBirthDate(fromObject.getBirthDate());
         user.setRole(fromObject.getRole());
+
+
+        Optional.of(fromObject.getImage())
+                .filter(Predicate.not(MultipartFile::isEmpty))
+                .ifPresent(image -> user.setImage(image.getOriginalFilename()));
 
         Optional.of(fromObject.getRawPassword())
                 .filter(StringUtils::hasText)

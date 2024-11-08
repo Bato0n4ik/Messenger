@@ -8,8 +8,8 @@
         <form th:action="@{'/users/' + ${user.getId()} +'/update'}" enctype="multipart/form-data" method="post">
 
             <div th:if="${user.image}">
-                <img th:src="@{/api/v1/users/{userId}/avatar(userId=${user.id})}" alt="avatar">
-            </div>
+            <img th:src="@{/api/v1/users/{userId}/avatar(userId=${user.id})}" alt="avatar">
+        </div>
 
             <label for="image">Chose image:
                 <input id="image" name="image" type="file">

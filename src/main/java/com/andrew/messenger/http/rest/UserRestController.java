@@ -4,6 +4,7 @@ import com.andrew.messenger.dto.UserCreateEditDto;
 import com.andrew.messenger.dto.UserReadDto;
 import com.andrew.messenger.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,13 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}/avatar")
-    public ResponseEntity<byte[]> findAvatar(@PathVariable Long id, @Validated @RequestBody UserCreateEditDto user) {
-        return null;
+    public ResponseEntity<byte[]> findAvatar(@PathVariable Long id) {
+        return userService.findAvatar(id)
+                .map(image -> ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .contentLength(image.length)
+                        .body(image))
+                .orElse(ResponseEntity.notFound().build());
     }
 
 

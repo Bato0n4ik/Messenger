@@ -56,15 +56,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}/update")
-    public String redirectToUpdate(@PathVariable Long id, UserReadDto user , Model model) {
+    public String redirectToUpdate(UserReadDto user , Model model) {
         model.addAttribute("user", user);
         return "user/update";
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, @ModelAttribute UserCreateEditDto user, Model model) {
+    public String update(@PathVariable Long id, @ModelAttribute UserCreateEditDto user) {
         return userService.update(id, user)
-                .map(entity -> { return "redirect:/users/" + id;})
+                .map(entity -> "redirect:/users/" + id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
     }
