@@ -33,21 +33,21 @@ public class User implements BaseEntity<Long>{
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
 
     private String password;
 
     private String image;
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserChat> userChats = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user_1")
+    @OneToMany(mappedBy = "user_1",  cascade = CascadeType.ALL)
     private List<UserFriend> userFriends = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user_2")
+    @OneToMany(mappedBy = "user_2",  cascade = CascadeType.ALL)
     private List<UserFriend> userFriendsTwo = new ArrayList<>();
 }

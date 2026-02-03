@@ -4,6 +4,9 @@ import com.andrew.messenger.database.entity.User;
 import com.andrew.messenger.dto.UserCreateEditDto;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -12,12 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User>{
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -39,10 +43,14 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User>{
                 .filter(Predicate.not(MultipartFile::isEmpty))
                 .ifPresent(image -> user.setImage(image.getOriginalFilename()));
 
+        log.info("password before encoding: {}", fromObject.getRawPassword());
+
         Optional.of(fromObject.getRawPassword())
                 .filter(StringUtils::hasText)
                 .map(passwordEncoder::encode)
                 .ifPresent(user::setPassword);
+
+
     }
 
     @Override

@@ -1,13 +1,25 @@
 
+logging:
+  level:
+    root: error
+    com.andrew.messenger.http.controllers: info
+  file:
+    name: userController.log
+    path: /
+
+
+
 spring:
   mvc:
     format:
       date: iso
+    servlet:
+      path: /
   application:
     name: messenger
   datasource:
     username: postgres
-    password: 0000
+    password: postgres
     url: jdbc:postgresql://localhost:5432/messenger
     driver-class-name: org.postgresql.Driver
   jpa:
@@ -17,3 +29,5 @@ spring:
           auto: validate
         show_sql: true
         format_sql: true
+    open-in-view: false
+

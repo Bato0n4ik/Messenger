@@ -4,8 +4,13 @@ import com.andrew.messenger.database.entity.Role;
 import com.andrew.messenger.dto.UserCreateEditDto;
 import com.andrew.messenger.dto.UserReadDto;
 import com.andrew.messenger.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,11 +22,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Controller
+@Slf4j
 public class UserController {
 
     private final UserService userService;
 
 
+
+    @PostMapping("/redirect")
+    public String authorizationRedirection(@AuthenticationPrincipal UserDetails userDetails,   Model model) {
+        log.info("AuthorizationRedirection endpoint: entering authorizationRedirection");
+        String username =  userDetails.getUsername();
+
+        return  userService.findByUsername(username)
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    model.addAttribute("roles", Role.values());
+                    log.info("AuthorizationRedirection endpoint : redirecting to user {} page", username);
+                    return "user/user";
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {
@@ -35,9 +56,11 @@ public class UserController {
     }
 
     @GetMapping("/registration")
-    public String registration(@ModelAttribute  UserCreateEditDto user , Model model) {
+    public String registration( Model model, @ModelAttribute  UserCreateEditDto user) {
+        log.info("Registration endpoint: entering registration");
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
+        log.info("Registration endpoint : redirecting to registration form");
         return "user/registration";
     }
 
@@ -45,13 +68,20 @@ public class UserController {
     public String create(@ModelAttribute @Validated UserCreateEditDto user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
+        log.info("Create endpoint: entering in create endpoint!");
         if(bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            var errors = bindingResult.getAllErrors();
+            log.error("Create endpoint: bindingResult has errors - {}", errors);
             redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("errors", errors);
+            log.error("Create endpoint: redirecting to registration form again due to the fact that bindingResult has errors");
             return "redirect:/users/registration";
         }
 
-        userService.create(user);
+
+        UserReadDto userReadDto = userService.create(user);
+        System.out.println("User: " + userReadDto);
+        log.info("Create endpoint: bindingResult hasn't errors, redirecting to /login endpoint");
         return "redirect:/login";
     }
 

@@ -9,17 +9,22 @@ import com.andrew.messenger.mapper.UserCreateEditMapper;
 import com.andrew.messenger.mapper.UserReadMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.Optional;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
@@ -43,8 +48,7 @@ public class UserService {
 
     public Optional<byte[]> findAvatar(Long id){
         return userRepository.findById(id)
-                .flatMap(user -> imageService.getImage(user.getImage()))
-                ;
+                .flatMap(user -> imageService.getImage(user.getImage()));
     }
 
     @Transactional
@@ -52,9 +56,10 @@ public class UserService {
         return Optional.of(userCreateEditDto)
                 .map(createDto -> {
                     uploadImage(createDto.getImage());
+                    log.info("image uploaded");
                     return userCreateEditMapper.map(createDto);
                 })
-                .map(userRepository::saveAndFlush)
+                .map(userRepository::save)
                 .map(userReadMapper::map)
                 .orElseThrow();
     }
@@ -79,4 +84,13 @@ public class UserService {
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var repositoryUser = Optional.ofNullable(userRepository.findByUsername(username));
+        return repositoryUser.map(user -> new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                Collections.singleton(user.getRole())))
+                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
+    }
 }

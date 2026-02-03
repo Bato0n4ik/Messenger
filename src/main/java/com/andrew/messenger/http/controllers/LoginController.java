@@ -21,16 +21,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class LoginController {
 
-    public final UserService userService;
-    public final LoginValidator loginValidator;
+    //public final UserService userService;
+    //public final LoginValidator loginValidator;
 
-    @GetMapping
+    /*@GetMapping
     public String login(LoginDto loginDto, Model model){
         model.addAttribute("loginDto", loginDto);
         return "user/login";
-    }
+    }/*
 
-    @PostMapping
+    /*@PostMapping
     public String loginPost(@ModelAttribute @Validated LoginDto loginDto,
                             BindingResult bindingResult,
                             RedirectAttributes redirectAttributes){
@@ -48,5 +48,10 @@ public class LoginController {
                 .map(User::getId)
                 .map(id -> "redirect:/users/"+ id)
                 .orElseThrow(() -> new UsernameNotFoundException(loginDto.getUsername()));
+    }*/
+
+    @GetMapping
+    public String login() {
+        return "user/login";
     }
 }

@@ -5,21 +5,26 @@
     <title>Login</title>
 </head>
 <body>
+
+    <div style="color: red" th:if="${param.error}">
+        Bad credentials
+    </div>
     <div>
-        <form action="/login" method="post" th:object="${loginDto}">
+        <form th:action="@{/login}" method="post">
+            <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}">
             <label for="username">Username:
-                <input id="username" type="email" name="username" th:value="*{username}">
+                <input id="username" type="text" name="username">
             </label><br>
 
             <label for="password">Password:
-                <input id="password" type="password" name="password" th:value="*{password}">
+                <input id="password" type="password" name="password">
             </label><br>
 
-            <input type="submit" value="register">
+            <input type="submit" value="login">
         </form>
     </div>
-    <div>
-        <a href="users/registration">Registration</a>
-    </div>
+    <form action="/users/registration" method="get">
+        <button type="submit">Registration</button>
+    </form>
 </body>
 </html>

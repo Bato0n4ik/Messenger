@@ -25,6 +25,6 @@ public class Chat implements BaseEntity<Long>{
     private String messages;
 
     @Builder.Default
-    @OneToMany(mappedBy = "chat")
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
     private List<UserChat> userChats = new ArrayList<>();
 }

@@ -5,7 +5,9 @@
     <title>Registration</title>
 </head>
 <body>
-    <form th:action="@{/registration}" method="post" enctype="multipart/form-data" th:object="${user}">
+    <form th:action="@{/users}" method="post" enctype="multipart/form-data" th:object="${user}">
+
+        <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}">
 
         <label for="firstname">Firstname:
             <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
@@ -16,29 +18,33 @@
         </label><br>
 
         <label for="birthDate">Birthdate:
-            <input id="birthDate" name="birthDate" type="text" th:value="*{birthDate}">
+            <input id="birthDate" name="birthDate" type="date" th:value="*{birthDate}">
         </label><br>
 
         <label for="username">Username:
             <input id="username" type="email" name="username" th:value="*{username}">
         </label><br>
 
-        <label for="password">Password:
-            <input id="password" type="password" name="password" th:value="*{rawPassword}">
+        <label for="rawPassword">Password:
+            <input id="rawPassword" type="password" name="rawPassword" th:value="*{rawPassword}">
         </label><br>
 
         <label for="role">Role:
-            <select id="role" >
+            <select id="role" name="role">
                 <option th:each="role : ${roles}" th:value="${role.name()}"
                         th:selected="${role.name() == role.name()}" th:text="${role.name()}">Role</option>
             </select>
-        </label>
+        </label><br>
 
         <label for="image">Chose avatar:
             <input id="image" type="file" name="image">
         </label><br>
 
         <input type="submit" value="register">
-    </form>
+    </form><br>
+
+    <div th:if="${errors}">
+        <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
+    </div>
 </body>
 </html>
