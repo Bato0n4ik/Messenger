@@ -4,6 +4,8 @@ import com.andrew.messenger.dto.UserCreateEditDto;
 import com.andrew.messenger.dto.UserReadDto;
 import com.andrew.messenger.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,8 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RestController("/api/v1/users")
+
+@RestController
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserRestController {
 
     private final UserService userService;
@@ -34,14 +39,22 @@ public class UserRestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}/avatar")
+    @GetMapping("/{id}/avatar")
     public ResponseEntity<byte[]> findAvatar(@PathVariable Long id) {
+
         return userService.findAvatar(id)
-                .map(image -> ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                        .contentLength(image.length)
-                        .body(image))
-                .orElse(ResponseEntity.notFound().build());
+                .map(image -> {
+                    log.info("Avatar is found, size: {}", image.length);
+                    return ResponseEntity.ok()
+                            .header(HttpHeaders.CONTENT_TYPE,MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                            .contentLength(image.length)
+                            .body(image);
+                })
+                .orElseGet(()->{
+                    log.error("Avatar not found in DB!");
+                    return ResponseEntity.notFound().build();
+                });
+
     }
 
 

@@ -7,6 +7,7 @@ import com.andrew.messenger.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,23 +27,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
 
     private final UserService userService;
-
-
-
-    @PostMapping("/redirect")
-    public String authorizationRedirection(@AuthenticationPrincipal UserDetails userDetails,   Model model) {
-        log.info("AuthorizationRedirection endpoint: entering authorizationRedirection");
-        String username =  userDetails.getUsername();
-
-        return  userService.findByUsername(username)
-                .map(user -> {
-                    model.addAttribute("user", user);
-                    model.addAttribute("roles", Role.values());
-                    log.info("AuthorizationRedirection endpoint : redirecting to user {} page", username);
-                    return "user/user";
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {

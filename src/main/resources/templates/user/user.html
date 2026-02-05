@@ -6,13 +6,22 @@
 </head>
 <body>
     <div>
-        <div th:insert="~{fragment :: logout}"></div>
 
-        <div th:name="header">
-            <form id="update" th:action="@{'/user/' + ${user.getId()} + '/update'}"  method="get">
-                <button form="update" name="user" th:value="${user}" type="submit" >update</button>
-            </form>
-        </div><br>
+       <div style="display: flex;">
+           <div style="width: 50%;" th:insert="~{fragment :: logout}"></div>
+
+           <div style="width: 50%;">
+               <form id="update" th:action="@{'/user/' + ${user.getId()} + '/update'}"  method="get">
+                   <button form="update" name="user" th:value="${user}" type="submit" >update</button>
+               </form>
+           </div>
+       </div>
+
+
+        <img id="avatar" th:data-user-id="${user.id}" alt="Avatar" width="100">
+        <script th:src="@{/js/loadAvatar.js}"></script>
+
+
 
         <div>
             <p th:text="${user.username}">Username</p><br>
