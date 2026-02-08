@@ -18,8 +18,10 @@
        </div>
 
 
-        <img id="avatar" th:data-user-id="${user.id}" alt="Avatar" width="100">
-        <script th:src="@{/js/loadAvatar.js}"></script>
+        <!--<img id="avatar" th:data-user-id="${user.id}" alt="Avatar" width="100">
+        <script th:src="@{/js/loadAvatar.js}"></script> !-->
+
+        <img th:src="@{'/api/v1/users/' + ${user.getId()} + '/avatar'}"  alt="Avatar" width="100">
 
 
 

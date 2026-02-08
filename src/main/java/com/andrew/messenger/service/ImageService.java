@@ -19,12 +19,10 @@ public class ImageService {
     private final String bucket;
 
     @SneakyThrows
-    public void upload(String imageName, InputStream inputStream) {
+    public void upload(String imageName, byte[] image) {
         Path fullImagePath = Path.of(bucket, imageName);
-        try(inputStream){
-            Files.createDirectories(fullImagePath.getParent());
-            Files.write(fullImagePath, inputStream.readAllBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        }
+        Files.createDirectories(fullImagePath.getParent());
+        Files.write(fullImagePath, image, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     @SneakyThrows

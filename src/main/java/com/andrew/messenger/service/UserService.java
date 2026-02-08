@@ -16,7 +16,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.tika.Tika;
+import javax.imageio.ImageIO;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -42,7 +46,24 @@ public class UserService implements UserDetailsService {
     @SneakyThrows
     private void uploadImage(MultipartFile image) {
         if(!image.isEmpty()){
-            imageService.upload(image.getOriginalFilename(), image.getInputStream());
+            Tika tika = new Tika();
+
+            String detectedType = tika.detect(image.getInputStream());
+            if (!detectedType.startsWith("image/")) {
+                throw new IllegalArgumentException("File is not an image!");
+            }
+
+            BufferedImage originalImage = ImageIO.read(image.getInputStream());
+            if (originalImage == null) {
+                throw new IllegalArgumentException("Invalid format or corrupted file");
+            }
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            String format = detectedType.split("/")[1];
+            ImageIO.write(originalImage, format, outputStream);
+
+
+            imageService.upload(image.getOriginalFilename(), outputStream.toByteArray());
         }
     }
 

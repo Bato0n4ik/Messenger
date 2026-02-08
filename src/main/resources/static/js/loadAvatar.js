@@ -1,7 +1,4 @@
 
-//const id = [[${user.id}]];
-
-
 document.addEventListener("DOMContentLoaded", () => {
     const avatarImg = document.getElementById('avatar');
     const id = avatarImg.dataset.userId;

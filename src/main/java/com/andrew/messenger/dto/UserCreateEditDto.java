@@ -1,6 +1,8 @@
 package com.andrew.messenger.dto;
 
 import com.andrew.messenger.database.entity.Role;
+import com.andrew.messenger.validation.FileSize;
+import com.andrew.messenger.validation.FormatInfo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,5 +33,7 @@ public class UserCreateEditDto {
 
     Role role;
 
+    @FormatInfo
+    @FileSize
     MultipartFile image;
 }

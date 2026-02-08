@@ -37,6 +37,7 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation 'org.liquibase:liquibase-core'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.apache.tika:tika-core:3.2.3'
 
 	annotationProcessor 'com.querydsl:querydsl-apt'
 	compileOnly 'org.projectlombok:lombok'
