@@ -50,13 +50,13 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User>{
         }
 
 
-        Optional.of(fromObject.getImage())
+        Optional.ofNullable(fromObject.getImage())
                 .filter(Predicate.not(MultipartFile::isEmpty))
                 .ifPresent(image -> user.setImage(image.getOriginalFilename()));
 
         //log.info("password before encoding: {}", fromObject.getRawPassword());
 
-        Optional.of(fromObject.getRawPassword())
+        Optional.ofNullable(fromObject.getRawPassword())
                 .filter(StringUtils::hasText)
                 .map(passwordEncoder::encode)
                 .ifPresent(user::setPassword);

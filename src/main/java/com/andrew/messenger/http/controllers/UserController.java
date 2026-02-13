@@ -4,6 +4,8 @@ import com.andrew.messenger.database.entity.Role;
 import com.andrew.messenger.dto.UserCreateEditDto;
 import com.andrew.messenger.dto.UserReadDto;
 import com.andrew.messenger.service.UserService;
+import com.andrew.messenger.validation.groups.OnCreate;
+import com.andrew.messenger.validation.groups.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute @Validated UserCreateEditDto user,
+    public String create(@ModelAttribute @Validated(OnCreate.class) UserCreateEditDto user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
         log.info("Create endpoint: entering in create endpoint!");
@@ -80,10 +82,11 @@ public class UserController {
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, @ModelAttribute @Validated UserCreateEditDto user,
+    public String update(@PathVariable Long id, @ModelAttribute @Validated(OnUpdate.class) UserCreateEditDto user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()) {
+            log.error("Update endpoint: bindingResult has errors - {}", bindingResult.getAllErrors());
             redirectAttributes.addFlashAttribute("user", user);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
 

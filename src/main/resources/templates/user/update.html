@@ -27,7 +27,7 @@
             <label th:for="firstname">Firstname:
                 <input  type="text" th:field="*{firstname}">
             </label><br>
-            <p style="color:red" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
+            <p style="color:red" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></p>
 
             <label th:for="lastname">Lastname:
                 <input  type="text" th:field="*{lastname}">

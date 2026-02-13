@@ -1,0 +1,23 @@
+
+.circle-avatar {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #3498db;
+
+    /* Плавность анимации */
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.circle-avatar:hover {
+    /* Цвет и радиус свечения */
+    box-shadow: 0 0 20px 5px rgba(52, 152, 219, 0.7);
+
+    /* Опционально: небольшое увеличение */
+    transform: scale(1.05);
+
+    /* Можно изменить цвет рамки при наведении */
+    border-color: #2980b9;
+}

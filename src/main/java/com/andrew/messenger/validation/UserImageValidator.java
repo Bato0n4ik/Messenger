@@ -8,6 +8,9 @@ public class UserImageValidator implements ConstraintValidator<FormatInfo, Multi
 
     @Override
     public boolean isValid(MultipartFile value, ConstraintValidatorContext context) {
+        if (value.isEmpty()) {
+            return true;
+        }
         return value.getOriginalFilename().endsWith(".jpg") || value.getOriginalFilename().endsWith(".png");
     }
 }

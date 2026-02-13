@@ -3,6 +3,7 @@ package com.andrew.messenger.dto;
 import com.andrew.messenger.database.entity.Role;
 import com.andrew.messenger.validation.FileSize;
 import com.andrew.messenger.validation.FormatInfo;
+import com.andrew.messenger.validation.groups.OnCreate;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ public class UserCreateEditDto {
     @Email
     String username;
 
-    @NotBlank
+    @NotBlank(groups = {OnCreate.class})
     String rawPassword;
 
     LocalDate birthDate;

@@ -3,29 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>User</title>
+    <link rel="stylesheet" href="/css/avatar-border.css">
 </head>
 <body>
     <div>
+       <div style="display: flex; justify-content: space-between; align-items: center;">
+           <div th:insert="~{fragment :: logout}"></div>
+            <div>
+                <div>
+                    <p th:text="${user.username}">Username</p><br>
+                </div>
 
-       <div style="display: flex;">
-           <div style="width: 50%;" th:insert="~{fragment :: logout}"></div>
-
-           <div style="width: 50%;">
-               <a th:href="@{'/user/' + ${user.id} + '/update'}" class="btn btn-primary">Update</a>
+            </div>
+           <div>
+               <a th:href="@{'/users/' + ${user.id} + '/edit'}">Update</a>
            </div>
-       </div>
-
+       </div><br/>
 
         <!--<img id="avatar" th:data-user-id="${user.id}" alt="Avatar" width="100">
         <script th:src="@{/js/loadAvatar.js}"></script> !-->
 
-        <img th:src="@{'/api/v1/users/' + ${user.getId()} + '/avatar'}"  alt="Avatar" width="100">
+        <div style="display: flex; justify-content: center; margin-top: 50px;">
+            <img th:src="@{'/api/v1/users/' + ${user.getId()} + '/avatar'}" class="circle-avatar" alt="Avatar">
+        </div>
 
 
-
-        <div>
-            <p th:text="${user.username}">Username</p><br>
-            <h2><p th:text="|${user.firstname} ${user.lastname}|">Full name</p></h2><br>
+        <div style="text-align: center;">
+            <h3><p  th:text= "|${user.firstname} ${user.lastname}|">Full name</p></h3><br>
             <p> Birthdate: <span th:text="${user.birthDate}">Birthdate</span></p>
         </div>
 
