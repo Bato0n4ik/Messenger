@@ -10,6 +10,9 @@ logging:
 
 
 spring:
+  threads:
+    virtual:
+      enabled: true
   mvc:
     format:
       date: iso

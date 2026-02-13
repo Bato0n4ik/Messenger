@@ -11,9 +11,7 @@
            <div style="width: 50%;" th:insert="~{fragment :: logout}"></div>
 
            <div style="width: 50%;">
-               <form id="update" th:action="@{'/user/' + ${user.getId()} + '/update'}"  method="get">
-                   <button form="update" name="user" th:value="${user}" type="submit" >update</button>
-               </form>
+               <a th:href="@{'/user/' + ${user.id} + '/update'}" class="btn btn-primary">Update</a>
            </div>
        </div>
 

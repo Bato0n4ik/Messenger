@@ -9,25 +9,26 @@
 
         <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}">
 
-        <label for="firstname">Firstname:
-            <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
+        <label th:for="firstname">Firstname:
+            <input type="text" th:field="*{firstname}">
         </label><br>
 
-        <label for="lastname">Lastname:
-            <input id="lastname" type="text" name="lastname" th:value="*{lastname}">
+        <label th:for="lastname">Lastname:
+            <input type="text" th:field="*{lastname}">
         </label><br>
 
-        <label for="birthDate">Birthdate:
-            <input id="birthDate" name="birthDate" type="date" th:value="*{birthDate}">
+        <label th:for="birthDate">Birthdate:
+            <input type="date" th:field="*{birthDate}">
         </label><br>
 
-        <label for="username">Username:
-            <input id="username" type="email" name="username" th:value="*{username}">
+        <label th:for="username">Username:
+            <input type="email" th:field="*{username}">
         </label><br>
 
-        <label for="rawPassword">Password:
-            <input id="rawPassword" type="password" name="rawPassword" th:value="*{rawPassword}">
+        <label th:for="rawPassword">Password:
+            <input type="password" th:field="*{rawPassword}">
         </label><br>
+
 
         <label for="role">Role:
             <select id="role" name="role">
@@ -41,10 +42,13 @@
         </label><br>
 
         <input type="submit" value="register">
+
     </form><br>
 
     <div th:if="${errors}">
         <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
     </div>
+
+
 </body>
 </html>

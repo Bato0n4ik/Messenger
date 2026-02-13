@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -64,14 +65,34 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/{id}/update")
-    public String redirectToUpdate(UserReadDto user , Model model) {
-        model.addAttribute("user", user);
+    @GetMapping("/{id}/edit")
+    public String redirectToUpdate(@PathVariable Long id, Model model) {
+
+        if(!model.containsAttribute("user")){
+            UserReadDto userReadDto = userService.findById(id).map(user -> {
+                model.addAttribute("user", user);
+                return user;
+            }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        }
+
         return "user/update";
+
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, @ModelAttribute UserCreateEditDto user) {
+    public String update(@PathVariable Long id, @ModelAttribute @Validated UserCreateEditDto user,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
+
+            //return "redirect:/users/" + id + "/edit";
+            return UriComponentsBuilder.fromPath("redirect:/user/{id}/edit")
+                    .buildAndExpand(id)
+                    .toUriString();
+        }
+
         return userService.update(id, user)
                 .map(entity -> "redirect:/users/" + id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

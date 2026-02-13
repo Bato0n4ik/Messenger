@@ -2,16 +2,12 @@ package com.andrew.messenger.mapper;
 
 import com.andrew.messenger.database.entity.User;
 import com.andrew.messenger.dto.UserCreateEditDto;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -32,18 +28,33 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User>{
     }
 
     private void copy(UserCreateEditDto fromObject, User user) {
-        user.setUsername(fromObject.getUsername());
-        user.setFirstname(fromObject.getFirstname());
-        user.setLastname(fromObject.getLastname());
-        user.setBirthDate(fromObject.getBirthDate());
-        user.setRole(fromObject.getRole());
+
+        if(fromObject.getUsername() != null) {
+            user.setUsername(fromObject.getUsername());
+        }
+
+        if(fromObject.getFirstname() != null) {
+            user.setFirstname(fromObject.getFirstname());
+        }
+
+        if(fromObject.getLastname() != null){
+            user.setLastname(fromObject.getLastname());
+        }
+
+        if(fromObject.getBirthDate() != null){
+            user.setBirthDate(fromObject.getBirthDate());
+        }
+
+        if(fromObject.getRole() != null){
+            user.setRole(fromObject.getRole());
+        }
 
 
         Optional.of(fromObject.getImage())
                 .filter(Predicate.not(MultipartFile::isEmpty))
                 .ifPresent(image -> user.setImage(image.getOriginalFilename()));
 
-        log.info("password before encoding: {}", fromObject.getRawPassword());
+        //log.info("password before encoding: {}", fromObject.getRawPassword());
 
         Optional.of(fromObject.getRawPassword())
                 .filter(StringUtils::hasText)
