@@ -7,9 +7,16 @@ logging:
     name: userController.log
     path: /
 
-
+mongodb:
+  exe:
+    path: "C:/mongoDB/mongodb-win32-x86_64-windows-8.2.5/bin/mongod.exe"
+  data:
+    path: "C:/data/db"
 
 spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/messenger
   threads:
     virtual:
       enabled: true
