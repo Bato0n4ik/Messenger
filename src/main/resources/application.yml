@@ -17,6 +17,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/messenger
+      auto-index-creation: true
   threads:
     virtual:
       enabled: true

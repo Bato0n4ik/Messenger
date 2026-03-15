@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class MongoAutoStartConfig {
@@ -41,7 +42,7 @@ public class MongoAutoStartConfig {
             ProcessBuilder pb = new ProcessBuilder(
                     mongoExePath,
                     "--dbpath", mongoDataPath,
-                    "--port", "27017" // Стандартный порт
+                    "--port", "27017"
             );
 
 
@@ -70,6 +71,11 @@ public class MongoAutoStartConfig {
         if (mongoProcess != null && mongoProcess.isAlive()) {
             mongoProcess.destroy();
             System.out.println("--- MongoDB остановлена вместе с приложением ---");
+            try {
+                mongoProcess.waitFor(15, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 }
