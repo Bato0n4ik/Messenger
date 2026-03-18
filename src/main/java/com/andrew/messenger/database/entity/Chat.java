@@ -1,5 +1,6 @@
 package com.andrew.messenger.database.entity;
 
+import com.andrew.messenger.database.mongo.ChatType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,7 +17,7 @@ import java.util.List;
 @EqualsAndHashCode(exclude = {"userChats"})
 @ToString(exclude = {"userChats"})
 @Builder
-@EntityListeners(AuditingEntityListener.class) // для генерации даты текущего времени для поля createdAt
+@EntityListeners(AuditingEntityListener.class)
 public class Chat implements BaseEntity<Long>{
 
     @Id
@@ -26,10 +27,11 @@ public class Chat implements BaseEntity<Long>{
     @Column(nullable = false)
     private String name;
 
-    private boolean isGroup;
+    @Enumerated(EnumType.STRING)
+    private ChatType chatType;
 
     @CreatedDate
-    @Column(name = "created_at", updatable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @Builder.Default

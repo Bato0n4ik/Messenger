@@ -6,20 +6,25 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Document(collation = "messages")
+@Document(collection = "messages")
 @CompoundIndex(name = "chat_history_idx", def="{chatId: 1, timestamp: -1}")
 public class Message {
 
     @Id
     private String id;
 
-    @Indexed(unique = true)
+    @Indexed
     private Long senderId;
 
     private Long chatId;
 
     private String text;
+
+    private List<Attachment> attachments; // Список вложений
+
+    private MessageType type; // ENUM: TEXT, IMAGE, FILE, MIXED
 
     private LocalDateTime timestamp;
 }
