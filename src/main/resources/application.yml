@@ -7,6 +7,14 @@ logging:
     name: userController.log
     path: /
 
+minio:
+  url: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  buckets:
+    avatars: user-avatars
+    chat-files: chat-attachments
+
 mongodb:
   exe:
     path: "C:/mongoDB/mongodb-win32-x86_64-windows-8.2.5/bin/mongod.exe"
