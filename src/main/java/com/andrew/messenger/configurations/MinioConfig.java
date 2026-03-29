@@ -38,13 +38,11 @@ public class MinioConfig {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("ќшибка создани€ бакета " + bucketName, e);
+            throw new RuntimeException("Error to create bucket " + bucketName, e);
         }
     }
 
     private void setPublicPolicy(MinioClient client, String bucketName) throws Exception {
-        // JSON-политика: разрешает действие "s3:GetObject" (скачивание) дл€ всех (*)
-        // в конкретном бакете по пути "им€-бакета/*"
         String policy = """
         {
             "Version": "2012-10-17",
@@ -66,6 +64,6 @@ public class MinioConfig {
                         .build()
         );
 
-        System.out.println("ѕубличный доступ дл€ бакета '" + bucketName + "' настроен.");
+        System.out.println("Public access for bucket " + bucketName + " configured.");
     }
 }
