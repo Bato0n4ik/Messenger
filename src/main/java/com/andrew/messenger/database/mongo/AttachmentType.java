@@ -9,8 +9,8 @@ public enum AttachmentType
     AUDIO(List.of("mpeg", "wav", "x-wav", "ogg", "aac", "mp4"), 20 * 1024 * 1024L),
     VIDEO(List.of("mp4", "mov", "avi"), 100 * 1024 * 1024L);
 
-    private List<String> allowedExtensions;
-    private long maxFileSize;
+    private final List<String> allowedExtensions;
+    private final long maxFileSize;
 
     AttachmentType(List<String> allowedExtensions, long maxFileSize){
         this.allowedExtensions = allowedExtensions;
