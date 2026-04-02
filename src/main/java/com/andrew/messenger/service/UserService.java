@@ -10,6 +10,9 @@ import com.andrew.messenger.mapper.UserReadMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.filters.Canvas;
+import net.coobird.thumbnailator.geometry.Positions;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.apache.tika.Tika;
 import javax.imageio.ImageIO;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.Collections;
@@ -33,7 +37,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
     private final UserCreateEditMapper userCreateEditMapper;
-    private final ImageService imageService;
+    private final AvatarService avatarService;
+    //private final ImageService imageService;
 
     public Optional<UserReadDto> findById(Long id){
         return userRepository.findById(id).map(userReadMapper::map);
@@ -48,28 +53,37 @@ public class UserService implements UserDetailsService {
         if(!image.isEmpty()){
             Tika tika = new Tika();
 
-            String detectedType = tika.detect(image.getInputStream());
-            if (!detectedType.startsWith("image/")) {
+            String contentType = tika.detect(image.getInputStream());
+            if (contentType == null || !contentType.startsWith("image/")) {
                 throw new IllegalArgumentException("File is not an image!");
             }
 
             BufferedImage originalImage = ImageIO.read(image.getInputStream());
-            if (originalImage == null) {
-                throw new IllegalArgumentException("Invalid format or corrupted file");
-            }
+            int width = originalImage.getWidth();
+            int height = originalImage.getHeight();
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            String format = detectedType.split("/")[1];
-            ImageIO.write(originalImage, format, outputStream);
 
+            //String format = contentType.split("/")[1];
+            //ImageIO.write(originalImage, format, outputStream);
+            //imageService.upload(image.getOriginalFilename(), outputStream.toByteArray());
 
-            imageService.upload(image.getOriginalFilename(), outputStream.toByteArray());
+            Thumbnails.of(originalImage)
+                    .scale(1.0)
+                    .addFilter(new Canvas(width, height, Positions.CENTER, Color.WHITE))
+                    .outputFormat("jpg")
+                    .outputQuality(0.9f)
+                    .toOutputStream(outputStream);
+
+            avatarService.uploadAvatar(image.getOriginalFilename(), outputStream.toByteArray());
         }
     }
 
     public Optional<byte[]> findAvatar(Long id){
         return userRepository.findById(id)
-                .flatMap(user -> imageService.getImage(user.getImage()));
+                .flatMap(user -> avatarService.getAvatar(user.getImage()));
+        //        .flatMap(user -> imageService.getImage(user.getImage()));
+
     }
 
     @Transactional

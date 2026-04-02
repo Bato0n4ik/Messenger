@@ -40,6 +40,7 @@ dependencies {
 	implementation 'io.minio:minio:9.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.apache.tika:tika-core:3.2.3'
+	implementation 'net.coobird:thumbnailator:0.4.21'
 
 	annotationProcessor 'com.querydsl:querydsl-apt'
 	compileOnly 'org.projectlombok:lombok'

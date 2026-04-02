@@ -1,9 +1,7 @@
 package com.andrew.messenger.service;
 
 import com.andrew.messenger.configurations.MinioProperties;
-import com.andrew.messenger.dto.message.AttachmentResponseDto;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.Http;
+import com.andrew.messenger.database.mongo.Attachment;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.errors.MinioException;
@@ -14,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +21,7 @@ public class FileStorageService {
     private final MinioClient minioClient;
     private final MinioProperties minioProperties;
 
-    public AttachmentResponseDto upload(MultipartFile file, String type) {
+    public Attachment uploadChatFiles(MultipartFile file, String type) {
 
 
         String fileId = UUID.randomUUID() + "." + type;
@@ -43,37 +40,13 @@ public class FileStorageService {
             throw new RuntimeException(exc);
         }
 
-        //Attachment attachment = new Attachment();
-        //attachment.setFileId(fileId);
-        //attachment.setFileName(objectPath);
-        //attachment.setType(type);
-        //attachment.setFileSize(file.getSize());
-
-
-        return AttachmentResponseDto.builder()
+        return Attachment.builder()
                 .fileId(fileId)
                 .fileName(objectPath) // it needed to easily get or delete object in future
                 .fileSize(file.getSize())
                 .type(type)
-                .url(generatedUrl(objectPath))
                 .build();
 
-    }
-
-    public String generatedUrl(String objectPath) {
-        try {
-            return minioClient.getPresignedObjectUrl(
-                    GetPresignedObjectUrlArgs.builder()
-                            .method(Http.Method.GET)
-                            .bucket(minioProperties.getBuckets().getChatFiles())
-                            .object(objectPath)
-                            .expiry(15, TimeUnit.MINUTES)
-                            .build()
-            );
-        } catch (Exception e) {
-            log.error("Can't generate url: {}", e.getMessage());
-            return null;
-        }
     }
 
 }

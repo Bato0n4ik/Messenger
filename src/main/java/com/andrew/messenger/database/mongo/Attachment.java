@@ -1,8 +1,12 @@
 package com.andrew.messenger.database.mongo;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Attachment {
 
     private String fileId;   // ID  (S3, GridFS)
