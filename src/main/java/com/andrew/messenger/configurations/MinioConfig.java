@@ -16,16 +16,18 @@ public class MinioConfig {
 
     @Bean
     public MinioClient minioClient() {
-        MinioClient client = MinioClient.builder()
+        return MinioClient.builder()
                 .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
-                .endpoint(System.getenv(minioProperties.getUrl()))
+                .endpoint(minioProperties.getUrl())
                 .build();
+    }
 
+
+    @Bean
+    public boolean initBuckets(MinioClient client){
         createBucket(client, minioProperties.getBuckets().getAvatars(), true);
         createBucket(client, minioProperties.getBuckets().getChatFiles(), false);
-
-        return client;
-
+        return true;
     }
 
     private void createBucket(MinioClient client, String bucketName, boolean isPublic) {
