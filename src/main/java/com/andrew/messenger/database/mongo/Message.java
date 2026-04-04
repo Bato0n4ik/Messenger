@@ -22,9 +22,9 @@ public class Message {
 
     private String text;
 
-    private List<Attachment> attachments; // Список вложений
+    private List<Attachment> attachments;
 
-    private MessageType type; // ENUM: TEXT, IMAGE, FILE, MIXED
+    private MessageType type;
 
     private LocalDateTime timestamp;
 }
